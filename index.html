@@ -8,7 +8,7 @@
 <body>
     <script>
 
-        
+
         function TimeAdder(t1, t2) {
             t1 = t1.split(":");
             t2 = t2.split(":");
@@ -55,6 +55,12 @@
             t1 = t1.split(":");
             t2 = t2.split(":");
 
+            for (let i = 0; i < 3; i++) {
+                if (isNaN(t1[i])==true || isNaN(t2[i])==true) {
+
+                    return 404;
+                }
+            }
             let sec = 60 - parseInt(t1[2]);
             let mint = 0;
             if (sec != 60) {
@@ -90,10 +96,26 @@
 
 
         }
+        function Error(output1, time1, displayEffectiveHours1) {
+            displayEffectiveHours1.innerHTML = " "
+            output1.innerHTML = " ";
+            time1.innerHTML = "";
+            output1.className = 'fadeOut ';
+            output1.focus();
+            output1.className = 'fadeIn output';
+            time1.className = 'fadeOut ';
+            time1.focus();
+            time1.className = 'fadeIn output';
+            output1.innerHTML = "Please Enter Logs in <br> Correct Format ";
+            time1.innerHTML = "";
+            return;
+        }
         function evaluator() {
             var output1 = document.getElementById('output');
             var time1 = document.getElementById('time');
-            var requiredEffectiveHours =document.getElementById('effectiveTime').value;
+            var displayEffectiveHours1 = document.getElementById('displayEffectiveHours');
+            var requiredEffectiveHours = document.getElementById('effectiveTime').value;
+            requiredEffectiveHours = requiredEffectiveHours.trim();
             // console.log(requiredEffectiveHours);
             var effectiveHours = "00:00:00";
             var flag = 0;
@@ -103,23 +125,19 @@
             console.log(a.length);
             console.log("Ff");
             let b = a.split(/(\s)/).filter((x) => x.trim().length > 0);
-            if (b.length % 2 != 0 || a.length == 0 || !b || !a) {
-                output1.innerHTML = " ";
-                time1.innerHTML = "";
-                output1.className = 'fadeOut ';
-                output1.focus(); // use focus trick without setTimeOut
-                output1.className = 'fadeIn output';
-                time1.className = 'fadeOut ';
-                time1.focus(); // use focus trick without setTimeOut
-                time1.className = 'fadeIn output';
-                output1.innerHTML = "Please Enter Logs in <br> Correct Format ";
-                time1.innerHTML = "";
+            if (b.length % 2 != 0 || a.length == 0 || !b || !a || !requiredEffectiveHours) {
+                Error(output1, time1, displayEffectiveHours1);
                 return;
             }
             for (let i = 0; i < b.length; i += 2) {
                 // console.log(b[i] + "," + b[i + 1]);
 
                 let diff = TimeDiff(b[i], b[i + 1]);
+                if (diff == 404) {
+                    Error(output1, time1, displayEffectiveHours1);
+                    return;
+
+                }
                 effectiveHours = TimeAdder(effectiveHours, diff);
                 // console.log(effectiveHours);
                 // console.log("ee");
@@ -133,32 +151,39 @@
                 endTime = TimeAdder(balancedEffectiveHours, getDate());
             }
 
-            console.log(flag);
+
+            // console.log(flag);
             if (flag == 1) {
                 output1.innerHTML = " ";
                 time1.innerHTML = "";
                 output1.className = 'fadeOut ';
-                output1.focus(); // use focus trick without setTimeOut
+                output1.focus();
                 output1.className = 'fadeIn output';
                 time1.className = 'fadeOut ';
-                time1.focus(); // use focus trick without setTimeOut
+                time1.focus();
                 time1.className = 'fadeIn output';
                 output1.innerHTML = "You can Leave Thank You";
                 time1.innerHTML = "";
 
             }
             else {
+                if (endTime.includes('NaN')) {
+                    Error(output1, time1, displayEffectiveHours1);
+                    return;
+                }
                 output1.innerHTML = " ";
                 time1.innerHTML = "";
                 output1.className = 'fadeOut ';
-                output1.focus(); // use focus trick without setTimeOut
+                output1.focus();
                 output1.className = 'fadeIn output';
                 time1.className = 'fadeOut ';
-                time1.focus(); // use focus trick without setTimeOut
+                time1.focus();
                 time1.className = 'fadeIn time';
                 output1.innerHTML = "You can Leave at";
                 time1.innerHTML = endTime;
             }
+            displayEffectiveHours1.innerHTML = "EffectiveHours:" + effectiveHours;
+
         }
 
     </script>
@@ -168,11 +193,15 @@
     <div class="information">
         <div class="logsText">Please Enter Total <span class="d">Effective Hours <br> (Example : 08:30:00)</span></div>
         <input type="text" id="effectiveTime" />
-        <div class="logsText">Copy Logs from Keka <span class="d">in 24Hrs Format<br> and enter below</span></div>
+        <div class="logsText">Copy Logs from Keka <span class="d">in 24Hrs Format<br> (HH:MM:SS) and enter below</span>
+        </div>
         <input type="text" id="logs" />
         <button class="logButton" onclick="evaluator()">SUBMIT</button>
-        <div class="output" id="output"> </div>
-        <div class="time" id="time" style="margin-top: -5px;"></div>
+        <div>
+            <div class="output" id="output"> </div>
+            <div class="time" id="time" style="margin-top: -5px;"></div>
+            <div class="displayEffectiveHours" id="displayEffectiveHours"></div>
+        </div>
     </div>
 
 </html>

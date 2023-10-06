@@ -106,3 +106,7 @@
     -ms-transition: all 1s;
     -o-transition: all 1s;
 }
+
+.displayEffectiveHours{
+    text-align: center;
+}
