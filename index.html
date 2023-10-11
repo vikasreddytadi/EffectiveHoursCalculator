@@ -115,6 +115,9 @@
             var time1 = document.getElementById('time');
             var displayEffectiveHours1 = document.getElementById('displayEffectiveHours');
             var requiredEffectiveHours = document.getElementById('effectiveTime').value;
+            if(requiredEffectiveHours == ""){
+                requiredEffectiveHours = "08:30:00";
+            }
             requiredEffectiveHours = requiredEffectiveHours.trim();
             // console.log(requiredEffectiveHours);
             var effectiveHours = "00:00:00";
@@ -125,7 +128,7 @@
             console.log(a.length);
             console.log("Ff");
             let b = a.split(/(\s)/).filter((x) => x.trim().length > 0);
-            if (b.length % 2 != 0 || a.length == 0 || !b || !a || !requiredEffectiveHours) {
+            if (b.length % 2 != 0 || a.length == 0 || !b || !a ) {
                 Error(output1, time1, displayEffectiveHours1);
                 return;
             }
@@ -191,7 +194,9 @@
     </div>
 
     <div class="information">
-        <div class="logsText">Please Enter Required  <span class="d">Effective Hours<br> (Example : 08:30:00)</span></div>
+        
+        <div class="logsText">Please Enter Required  <span class="d">Effective Hours <br> (Example : 08:30:00)</span>
+        <div style="font-size: 10px;">(Note: Enter if Effective Hours  less than 08:30:00 only)</div></div>
         <input type="text" id="effectiveTime" />
         <div class="logsText">Copy Logs from Keka <span class="d">in 24Hrs Format<br> (HH:MM:SS) and enter below</span>
         </div>
