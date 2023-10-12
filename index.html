@@ -8,12 +8,9 @@
 <body>
     <script>
 
-
         function TimeAdder(t1, t2) {
             t1 = t1.split(":");
             t2 = t2.split(":");
-
-
             let sec = parseInt(t1[2]) + parseInt(t2[2]);
             let mint = parseInt(t1[1]) + parseInt(t2[1]);
             let hrs = parseInt(t1[0]) + parseInt(t2[0]);
@@ -25,14 +22,12 @@
                 mint -= 60;
                 hrs += 1;
             }
-
             return hrs.toString() + ':' + mint.toString() + ':' + sec.toString();
-
         }
+
+
         function getDate() {
-
             const now = new Date();
-
             const options = {
                 hour: 'numeric',
                 minute: 'numeric',
@@ -40,24 +35,19 @@
                 hour12: false,
                 timeZone: 'Asia/Kolkata'
             };
-
             const time24hrs = now.toLocaleTimeString('en-IN', options);
-
             return (time24hrs);
         }
 
-        function TimeDiff(t1, t2) {
 
+        function TimeDiff(t1, t2) {
             if (t2 == "MISSING") {
                 t2 = getDate();
             }
-
             t1 = t1.split(":");
             t2 = t2.split(":");
-
             for (let i = 0; i < 3; i++) {
-                if (isNaN(t1[i])==true || isNaN(t2[i])==true) {
-
+                if (isNaN(t1[i]) == true || isNaN(t2[i]) == true) {
                     return 404;
                 }
             }
@@ -77,25 +67,21 @@
             if (mint == 60) {
                 mint = 0;
             }
-
             sec += parseInt(t2[2]);
             if (sec >= 60) {
                 sec -= 60;
                 mint += 1;
             }
             mint += parseInt(t2[1]);
-
             hrs = parseInt(t2[0]) - hrs;
             if (mint >= 60) {
                 mint -= 60;
                 hrs += 1;
             }
-
-
             return hrs.toString() + ':' + mint.toString() + ':' + sec.toString();
-
-
         }
+
+
         function Error(output1, time1, displayEffectiveHours1) {
             displayEffectiveHours1.innerHTML = " "
             output1.innerHTML = " ";
@@ -110,52 +96,38 @@
             time1.innerHTML = "";
             return;
         }
+
         function evaluator() {
             var output1 = document.getElementById('output');
             var time1 = document.getElementById('time');
             var displayEffectiveHours1 = document.getElementById('displayEffectiveHours');
             var requiredEffectiveHours = document.getElementById('effectiveTime').value;
-            if(requiredEffectiveHours == ""){
-                requiredEffectiveHours = "08:30:00";
-            }
             requiredEffectiveHours = requiredEffectiveHours.trim();
-            // console.log(requiredEffectiveHours);
             var effectiveHours = "00:00:00";
             var flag = 0;
             var endTime = "";
             var a = document.getElementById('logs').value;
             a = a.trim();
-            console.log(a.length);
-            console.log("Ff");
             let b = a.split(/(\s)/).filter((x) => x.trim().length > 0);
-            if (b.length % 2 != 0 || a.length == 0 || !b || !a ) {
+            if (b.length % 2 != 0 || a.length == 0 || !b || !a || !requiredEffectiveHours) {
                 Error(output1, time1, displayEffectiveHours1);
                 return;
             }
             for (let i = 0; i < b.length; i += 2) {
-                // console.log(b[i] + "," + b[i + 1]);
-
                 let diff = TimeDiff(b[i], b[i + 1]);
                 if (diff == 404) {
                     Error(output1, time1, displayEffectiveHours1);
                     return;
-
                 }
                 effectiveHours = TimeAdder(effectiveHours, diff);
-                // console.log(effectiveHours);
-                // console.log("ee");
             }
             let balancedEffectiveHours = TimeDiff(effectiveHours, requiredEffectiveHours);
-            // console.log(balancedEffectiveHours);
             if (balancedEffectiveHours[0] == '-') {
                 flag = 1;
             }
             else {
                 endTime = TimeAdder(balancedEffectiveHours, getDate());
             }
-
-
-            // console.log(flag);
             if (flag == 1) {
                 output1.innerHTML = " ";
                 time1.innerHTML = "";
@@ -167,7 +139,6 @@
                 time1.className = 'fadeIn output';
                 output1.innerHTML = "You can Leave Thank You";
                 time1.innerHTML = "";
-
             }
             else {
                 if (endTime.includes('NaN')) {
@@ -186,22 +157,31 @@
                 time1.innerHTML = endTime;
             }
             displayEffectiveHours1.innerHTML = "EffectiveHours:" + effectiveHours;
-
         }
 
     </script>
+
+
     <div class="main">
     </div>
 
     <div class="information">
-        
-        <div class="logsText">Please Enter Required  <span class="d">Effective Hours <br> (Example : 08:30:00)</span>
-        <div style="font-size: 10px;">(Note: Enter if Effective Hours  less than 08:30:00 only)</div></div>
-        <input type="text" id="effectiveTime" />
+        <div class="logsText">Please Enter Required <span class="d">Effective Hours <br> (Example : 08:30:00)</span>
+        </div>
+        <input type="text" id="effectiveTime" value="08:30:00" />
         <div class="logsText">Copy Logs from Keka <span class="d">in 24Hrs Format<br> (HH:MM:SS) and enter below</span>
         </div>
         <input type="text" id="logs" />
-        <button class="logButton" onclick="evaluator()">SUBMIT</button>
+        <button class="logButton" id="logButton" onclick="evaluator()">SUBMIT</button>
+        <script>
+            var input = document.getElementById("logs");
+            input.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    document.getElementById("logButton").click();
+                }
+            });
+        </script>
         <div>
             <div class="output" id="output"> </div>
             <div class="time" id="time" style="margin-top: -5px;"></div>
