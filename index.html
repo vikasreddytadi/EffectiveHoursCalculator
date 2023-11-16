@@ -40,16 +40,28 @@
         }
 
 
-        function TimeDiff(t1, t2,flag=0) {
+        function TimeDiff(t1, t2, flag = 0, hours1 = 0, hours2 = 0) {
             if (t2 == "MISSING") {
                 t2 = getDate();
             }
             t1 = t1.split(":");
             t2 = t2.split(":");
+            if (hours1 == 1) {
+                t1[0] = parseInt(t1[0]) + 12;
+                if (t1[0] == 24) {
+                    t1[0] = 0;
+                }
+            }
+            if (hours2 == 1) {
+                t2[0] = parseInt(t2[0]) + 12;
+                if (t2[0] == 24) {
+                    t2[0] = 0;
+                }
+            }
+
             for (let i = 0; i < 3; i++) {
                 if (i == 0) {
-                    if (parseInt(t1[i]) > 23 || parseInt(t2[i]) > 23 ) {
-
+                    if (parseInt(t1[i]) > 23 || parseInt(t2[i]) > 23) {
                         return 404;
                     }
                 }
@@ -121,19 +133,74 @@
             var a = document.getElementById('logs').value;
             a = a.trim();
             let b = a.split(/(\s)/).filter((x) => x.trim().length > 0);
-            if (b.length % 2 != 0 || a.length == 0 || !b || !a || !requiredEffectiveHours) {
-                Error(output1, time1, displayEffectiveHours1);
-                return;
+            var TwelveHours = 0;
+            if (a.includes("AM") || a.includes("PM")) {
+                TwelveHours = 1;
             }
-            for (let i = 0; i < b.length; i += 2) {
-                let diff = TimeDiff(b[i], b[i + 1]);
-                if (diff == 404) {
+            if (TwelveHours == 1) {
+                if (a.length == 0 || !b || !a || !requiredEffectiveHours) {
                     Error(output1, time1, displayEffectiveHours1);
                     return;
                 }
-                effectiveHours = TimeAdder(effectiveHours, diff);
+                if (a.includes("MISSING")) {
+                    if (b.length % 4 != 3) {
+                        Error(output1, time1, displayEffectiveHours1);
+                        return;
+                    }
+                }
+                else {
+                    if (b.length % 4 != 0) {
+                        Error(output1, time1, displayEffectiveHours1);
+                        return;
+                    }
+                }
+                for (let i = 0; i < b.length; i += 4) {
+                    var left = 0;
+                    var right = 0
+                    if (b[i + 1] == "AM" && parseInt(b[i ]) == 12) {
+                        left = 1;
+                    }
+                    else if (b[i + 1] == "PM" && parseInt(b[i ]) != 12) {
+                        left = 1;
+                    }
+                    else if (b[i + 1] != "PM" && b[i + 1] != "AM" && b[i + 1] != "MISSING") {
+                        Error(output1, time1, displayEffectiveHours1);
+                        return;
+                    }
+                    if (b[i + 3] == "AM" && parseInt(b[i + 2]) == 12) {
+                        right = 1;
+                    }
+                    else if (b[i + 3] == "PM" && parseInt(b[i + 2]) != 12) {
+                        right = 1;
+                    }
+                    else if (b[i + 3] != "PM" && b[i + 3] != "AM" && b[i + 3] != "MISSING" && b[i + 3] != undefined) {
+                        Error(output1, time1, displayEffectiveHours1);
+                        return;
+                    }
+                    let diff = TimeDiff(b[i], b[i + 2], 0, left, right);
+                    if (diff == 404) {
+                        Error(output1, time1, displayEffectiveHours1);
+                        return;
+                    }
+                    effectiveHours = TimeAdder(effectiveHours, diff);
+                }
             }
-            let balancedEffectiveHours = TimeDiff(effectiveHours, requiredEffectiveHours,1);
+            else {
+                if (b.length % 2 != 0 || a.length == 0 || !b || !a || !requiredEffectiveHours) {
+                    Error(output1, time1, displayEffectiveHours1);
+                    return;
+                }
+                for (let i = 0; i < b.length; i += 2) {
+                    let diff = TimeDiff(b[i], b[i + 1]);
+                    if (diff == 404) {
+                        Error(output1, time1, displayEffectiveHours1);
+                        return;
+                    }
+                    effectiveHours = TimeAdder(effectiveHours, diff);
+                }
+            }
+
+            let balancedEffectiveHours = TimeDiff(effectiveHours, requiredEffectiveHours, 1);
             if (balancedEffectiveHours[0] == '-') {
                 flag = 1;
             }
@@ -178,10 +245,11 @@
     </div>
 
     <div class="information">
+        <div class="message">Note: You can enter logs in 12hrs format also.</div>
         <div class="logsText">Please Enter Required <span class="d">Effective Hours <br> (Example : 08:30:00)</span>
         </div>
         <input type="text" id="effectiveTime" value="08:00:00" />
-        <div class="logsText">Copy Logs from Keka <span class="d">in 24Hrs Format<br> (HH:MM:SS) and enter below</span>
+        <div class="logsText">Copy Logs from Keka <span class="d">and Enter below</span>
         </div>
         <input type="text" id="logs" />
         <button class="logButton" id="logButton" onclick="evaluator()">SUBMIT</button>
