@@ -47,7 +47,12 @@
             t1 = t1.split(":");
             t2 = t2.split(":");
             for (let i = 0; i < 3; i++) {
-                if (isNaN(t1[i]) == true || isNaN(t2[i]) == true) {
+                if(i==0){
+                    if (parseInt(t1[i])>23 || parseInt(t2[i])<0 ) {
+                        return 404;
+                    }
+                }
+                if (isNaN(t1[i]) == true || isNaN(t2[i]) == true || parseInt(t1[i])>59 || parseInt(t2[i])>59 || parseInt(t1[i])<0 || parseInt(t2[i])<0 ) {
                     return 404;
                 }
             }
