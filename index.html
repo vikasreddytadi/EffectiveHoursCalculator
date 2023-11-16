@@ -40,19 +40,20 @@
         }
 
 
-        function TimeDiff(t1, t2) {
+        function TimeDiff(t1, t2,flag=0) {
             if (t2 == "MISSING") {
                 t2 = getDate();
             }
             t1 = t1.split(":");
             t2 = t2.split(":");
             for (let i = 0; i < 3; i++) {
-                if(i==0){
-                    if (parseInt(t1[i])>23 || parseInt(t2[i])<0 ) {
+                if (i == 0) {
+                    if (parseInt(t1[i]) > 23 || parseInt(t2[i]) > 23 ) {
+
                         return 404;
                     }
                 }
-                if (isNaN(t1[i]) == true || isNaN(t2[i]) == true || parseInt(t1[i])>59 || parseInt(t2[i])>59 || parseInt(t1[i])<0 || parseInt(t2[i])<0 ) {
+                if (isNaN(t1[i]) == true || isNaN(t2[i]) == true || parseInt(t1[i]) > 59 || parseInt(t2[i]) > 59 || parseInt(t1[i]) < 0 || parseInt(t2[i]) < 0) {
                     return 404;
                 }
             }
@@ -78,7 +79,13 @@
                 mint += 1;
             }
             mint += parseInt(t2[1]);
-            hrs = parseInt(t2[0]) - hrs;
+            if (parseInt(t1[0]) > parseInt(t2[0]) && flag == 0) {
+                hrs = 24 - hrs;
+                hrs += parseInt(t2[0]);
+            }
+            else {
+                hrs = parseInt(t2[0]) - hrs;
+            }
             if (mint >= 60) {
                 mint -= 60;
                 hrs += 1;
@@ -126,7 +133,7 @@
                 }
                 effectiveHours = TimeAdder(effectiveHours, diff);
             }
-            let balancedEffectiveHours = TimeDiff(effectiveHours, requiredEffectiveHours);
+            let balancedEffectiveHours = TimeDiff(effectiveHours, requiredEffectiveHours,1);
             if (balancedEffectiveHours[0] == '-') {
                 flag = 1;
             }
