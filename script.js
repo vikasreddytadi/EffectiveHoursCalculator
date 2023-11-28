@@ -59,21 +59,21 @@ function TimeValidation(t1, t2, format) {
         }
         else if (format == 24) {
             if (i == 0) {
-                if (parseInt(t1[i]) > 23 || parseInt(t2[i]) > 23) {
+                if (parseInt(t1[i]) > 23 || parseInt(t2[i]) > 23 || parseInt(t1[i]) < 0 || parseInt(t2[i]) < 0) {
                     return 404;
                 }
             }
-            if (isNaN(t1[i]) == true || isNaN(t2[i]) == true || parseInt(t1[i]) > 59 || parseInt(t2[i]) > 59 || parseInt(t1[i]) < 0 || parseInt(t2[i]) < 0) {
+            else if (isNaN(t1[i]) == true || isNaN(t2[i]) == true || parseInt(t1[i]) > 59 || parseInt(t2[i]) > 59 || parseInt(t1[i]) < 0 || parseInt(t2[i]) < 0) {
                 return 404;
             }
         }
         else if (format == 12) {
             if (i == 0) {
-                if (parseInt(t1[i]) > 12 || parseInt(t2[i]) > 12) {
+                if (parseInt(t1[i]) > 12 || parseInt(t2[i]) > 12 || parseInt(t1[i]) <= 0 || parseInt(t2[i]) <= 0) {
                     return 404;
                 }
             }
-            if (isNaN(t1[i]) == true || isNaN(t2[i]) == true || parseInt(t1[i]) > 59 || parseInt(t2[i]) > 59 || parseInt(t1[i]) < 0 || parseInt(t2[i]) < 0) {
+            else if (isNaN(t1[i]) == true || isNaN(t2[i]) == true || parseInt(t1[i]) > 59 || parseInt(t2[i]) > 59 || parseInt(t1[i]) < 0 || parseInt(t2[i]) < 0) {
                 return 404;
             }
         }
@@ -319,7 +319,7 @@ function evaluator() {
     // RunTimeEffectiveHours(displayEffectiveHours1);
 }
 
-// for runtime effective time 
+// for runtime effective time
 // function RunTimeEffectiveHours() {
 //     clearTimeout(window.localStorage.TimeOutId);
 //     count++;
