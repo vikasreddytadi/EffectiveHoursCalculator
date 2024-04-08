@@ -173,10 +173,14 @@ function TwentyFourHrsConverter(time) {
     return t
 }
 
-let displayEffectiveHours1 = document.getElementById('displayEffectiveHours');
+// let displayEffectiveHours1 = document.getElementById('displayEffectiveHours');
+
 
 function evaluator() {
     // clearTimeout(window.localStorage.TimeOutId);
+    var remainingEffectiveHours1 = document.getElementById('displayRemainingEffectiveHours');
+    var showHours = document.getElementById('hoursHolder');
+    showHours.style.display = "none";
     var output1 = document.getElementById('output');
     var time1 = document.getElementById('time');
     displayEffectiveHours1 = document.getElementById('displayEffectiveHours');
@@ -269,7 +273,7 @@ function evaluator() {
         Error(output1, time1, displayEffectiveHours1);
         return;
     }
-    let balancedEffectiveHours = TimeDiff(effectiveHours, requiredEffectiveHours, 1);
+    var balancedEffectiveHours = TimeDiff(effectiveHours, requiredEffectiveHours, 1);
     if (balancedEffectiveHours[0] == '-') {
         flag = 1;
     }
@@ -282,7 +286,9 @@ function evaluator() {
             return;
         }
     }
+
     if (flag == 1) {
+        showHours.style.display = "flex";
         output1.innerHTML = " ";
         time1.innerHTML = "";
         output1.className = 'fadeOut ';
@@ -293,12 +299,14 @@ function evaluator() {
         time1.className = 'fadeIn output';
         output1.innerHTML = "You can Leave Thank You";
         time1.innerHTML = "";
+        remainingEffectiveHours1.innerHTML = "00:00:00";
     }
     else {
         if (endTime.includes('NaN')) {
             Error(output1, time1, displayEffectiveHours1);
             return;
         }
+        showHours.style.display = "flex";
         output1.innerHTML = " ";
         time1.innerHTML = "";
         output1.className = 'fadeOut ';
@@ -309,8 +317,10 @@ function evaluator() {
         time1.className = 'fadeIn time';
         output1.innerHTML = "You can Leave at";
         time1.innerHTML = endTime;
+        remainingEffectiveHours1.innerHTML = balancedEffectiveHours;
     }
-    displayEffectiveHours1.innerHTML = "EffectiveHours:" + effectiveHours;
+    displayEffectiveHours1.innerHTML = effectiveHours;
+
     // effectiveHours = effectiveHours.split(":");
     // h = parseInt(effectiveHours[0]);
     // m = parseInt(effectiveHours[1]);

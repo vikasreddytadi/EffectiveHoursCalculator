@@ -5,11 +5,11 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body> 
+<body>
     <div class="main">
     </div>
     <div class="information">
-        <div class="message">Note: You can enter logs in 12hrs format also.</div>
+        <!-- <div class="message">Note: You can enter logs in 12hrs format also.</div> -->
         <div class="logsText">Please Enter Required <span class="d">Effective Hours <br> (Example : 08:30:00)</span>
         </div>
         <input type="text" id="effectiveTime" value="" />
@@ -20,8 +20,20 @@
         <div>
             <div class="output" id="output"> </div>
             <div class="time" id="time" style="margin-top: -5px;"></div>
-            <div class="displayEffectiveHours" id="displayEffectiveHours"></div>
+            <div class="hoursHolder" id="hoursHolder">
+                <div class="effectiveHours">
+                    <div class="bold">Effective Hours
+                    </div>
+                    <span id="displayEffectiveHours"></span>
+                </div>
+                <div class="remainingEffectiveHours">
+                    <div class="bold">Remaining Hours
+                    </div>
+                    <span id="displayRemainingEffectiveHours"></span>
+                </div>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
+
 </html>

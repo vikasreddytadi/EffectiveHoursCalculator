@@ -35,7 +35,8 @@
     color: aqua;
 }
 
-.information #logs, .information #effectiveTime {
+.information #logs,
+.information #effectiveTime {
     width: 50%;
     background: transparent;
     border: 0;
@@ -45,7 +46,8 @@
     color: aqua;
 }
 
-#logs:focus, #effectiveTime:focus {
+#logs:focus,
+#effectiveTime:focus {
     outline: none;
 }
 
@@ -95,10 +97,40 @@
     -o-transition: all 1s;
 }
 
-.displayEffectiveHours{
+.hoursHolder {
     text-align: center;
+    display: none;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
 }
 
-.message{
-    color:white;
+.message {
+    color: white;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.bold span {
+    font-weight: normal;
+    color: white;
+}
+
+.effectiveHours,
+.remainingEffectiveHours {
+    display: flex;
+    flex-direction: column;
+}
+
+#displayEffectiveHours {
+    color: rgb(0, 148, 0);
+    font-weight: 900;
+
+}
+
+#displayRemainingEffectiveHours {
+    color: red;
+    font-weight: 900;
 }
