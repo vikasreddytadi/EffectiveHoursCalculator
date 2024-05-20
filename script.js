@@ -13,11 +13,6 @@ if (!localStorage.effectiveHours) {
 
 document.getElementById('effectiveTime').value = window.localStorage.effectiveHours;
 
-// let h = 0;
-// let m = 0;
-// let s = 0;
-// let count = 0;
-
 function TimeAdder(t1, t2) {
     t1 = t1.split(":");
     t2 = t2.split(":");
@@ -150,7 +145,6 @@ function Error(output1, time1, displayEffectiveHours1) {
     return;
 }
 
-
 function TwentyFourHrsConverter(time) {
     t = time.split(":");
     hrs = parseInt(t[0]);
@@ -173,11 +167,10 @@ function TwentyFourHrsConverter(time) {
     return t
 }
 
-// let displayEffectiveHours1 = document.getElementById('displayEffectiveHours');
-
-
+var effectiveCompletedFlag = 0;
+var items = new Array();
 function evaluator() {
-    // clearTimeout(window.localStorage.TimeOutId);
+    effectiveCompletedFlag = 0;
     var remainingEffectiveHours1 = document.getElementById('displayRemainingEffectiveHours');
     var showHours = document.getElementById('hoursHolder');
     showHours.style.display = "none";
@@ -320,35 +313,27 @@ function evaluator() {
         remainingEffectiveHours1.innerHTML = balancedEffectiveHours;
     }
     displayEffectiveHours1.innerHTML = effectiveHours;
-
-    // effectiveHours = effectiveHours.split(":");
-    // h = parseInt(effectiveHours[0]);
-    // m = parseInt(effectiveHours[1]);
-    // s = parseInt(effectiveHours[2]);
-    // count = 0;
-    // RunTimeEffectiveHours(displayEffectiveHours1);
+    var time = getDate();
+    items.forEach(x => clearInterval(x));
+    items.push(setInterval(function () {
+        DisplayEffectiveRemaining(time, effectiveHours, balancedEffectiveHours, remainingEffectiveHours1, displayEffectiveHours1, output1, time1);
+    }, 1000));
 }
-
-// for runtime effective time
-// function RunTimeEffectiveHours() {
-//     clearTimeout(window.localStorage.TimeOutId);
-//     count++;
-//     if (count == 100) {
-//         s++;
-//         count = 0;
-//     }
-
-//     if (s == 60) {
-//         m++;
-//         s = 0;
-//     }
-
-//     if (m == 60) {
-//         h++;
-//         m = 0;
-//         s = 0;
-//     }
-//     displayEffectiveHours1.innerHTML = "EffectiveHours:" + h.toString() + ":" + m.toString() + ":" + s.toString() ;
-//     window.localStorage.TimeOutId = setTimeout(RunTimeEffectiveHours, 10);
-// }
-
+// for realtime effective time
+function DisplayEffectiveRemaining(callTime, effectiveHours, balancedEffectiveHours, remainingEffectiveHours1, displayEffectiveHours1, output1, time1) {
+    var realtimeTimeDifference = TimeDiff(callTime, getDate(), 1)
+    var realtimeEffective = TimeAdder(effectiveHours, realtimeTimeDifference);
+    if (effectiveCompletedFlag == 0) {
+        var realtimeRemaining = TimeDiff(realtimeTimeDifference, balancedEffectiveHours, 1);
+    }
+    if (effectiveCompletedFlag == 0 && realtimeRemaining[0] == '-') {
+        effectiveCompletedFlag = 1;
+        output1.innerHTML = "You can Leave Thank You";
+        time1.innerHTML = "";
+        realtimeRemaining = "00:00:00";
+    }
+    if (effectiveCompletedFlag == 0) {
+        remainingEffectiveHours1.innerHTML = realtimeRemaining;
+    }
+    displayEffectiveHours1.innerHTML = realtimeEffective;
+}
