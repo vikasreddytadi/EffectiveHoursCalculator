@@ -330,7 +330,7 @@ function DisplayEffectiveRemaining(callTime, effectiveHours, balancedEffectiveHo
         effectiveCompletedFlag = 1;
         output1.innerHTML = "You can Leave Thank You";
         time1.innerHTML = "";
-        realtimeRemaining = "00:00:00";
+        remainingEffectiveHours1.innerHTML = "00:00:00";
     }
     if (effectiveCompletedFlag == 0) {
         remainingEffectiveHours1.innerHTML = realtimeRemaining;
